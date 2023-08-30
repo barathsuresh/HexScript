@@ -107,7 +107,7 @@ class _HomePageState extends State<HomePage> {
             Padding(
               padding: EdgeInsets.only(left: 25),
               child: AnimatedTextKit(repeatForever: true, animatedTexts: [
-                TypewriterAnimatedText("Secure Scribbles",
+                TypewriterAnimatedText("HexScript",
                     textStyle: GoogleFonts.inconsolata(
                         fontSize: 40, fontWeight: FontWeight.bold),
                 speed: Duration(milliseconds: 100),)
@@ -122,7 +122,7 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Developed with ❤",style: TextStyle(fontWeight: FontWeight.normal),),
+                    Text("Developed by",style: TextStyle(fontWeight: FontWeight.normal),),
                     Text("               ~Barath Suresh",style: TextStyle(fontWeight: FontWeight.w900),)
                   ],
               ),

@@ -22,10 +22,10 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
   static final _defaultLightColorScheme =
-  ColorScheme.fromSwatch(primarySwatch: Colors.blue);
+  ColorScheme.fromSwatch(primarySwatch: Colors.blue,brightness: Brightness.light);
 
   static final _defaultDarkColorScheme = ColorScheme.fromSwatch(
-      primarySwatch: Colors.blue, brightness: Brightness.dark);
+      primarySwatch: Colors.blue,brightness: Brightness.dark);
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -37,13 +37,13 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             useMaterial3: true,
             colorScheme: ColorScheme2 ?? _defaultLightColorScheme,
-            brightness: Brightness.light,
+            // brightness: Brightness.light,
             textTheme:
             GoogleFonts.robotoSlabTextTheme(Theme.of(context).textTheme.apply(bodyColor: Colors.white,displayColor: Colors.white70)),
           ),
 
           darkTheme: ThemeData(
-            brightness: Brightness.dark,
+            // brightness: Brightness.dark,
             useMaterial3: true,
             colorScheme: ColorScheme1 ?? _defaultDarkColorScheme,
             textTheme:

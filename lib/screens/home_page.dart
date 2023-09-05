@@ -1,14 +1,11 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:encrynotes/api/local_auth_api.dart';
-import 'package:encrynotes/constants/colors_constants.dart';
 import 'package:encrynotes/models/note.dart';
 import 'package:encrynotes/models/note_data.dart';
-import 'package:encrynotes/screens/editing_note_page.dart';
 import 'package:encrynotes/screens/note_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -75,7 +72,7 @@ class _HomePageState extends State<HomePage> {
           title: Row(
             children: [
               ImageIcon(
-                AssetImage("images/notepad.png"),
+                const AssetImage("images/notepad.png"),
                 color:
                     Theme.of(context).colorScheme.secondary.computeLuminance() >
                             0.5
@@ -83,7 +80,7 @@ class _HomePageState extends State<HomePage> {
                         : Colors.white,
                 size: 30,
               ),
-              SizedBox(
+              const SizedBox(
                 width: 10,
               ),
               AnimatedTextKit(
@@ -94,7 +91,7 @@ class _HomePageState extends State<HomePage> {
                       "HexScript",
                       textStyle: GoogleFonts.inconsolata(
                           fontSize: 40, fontWeight: FontWeight.bold),
-                      speed: Duration(milliseconds: 100),
+                      speed: const Duration(milliseconds: 100),
                     )
                   ]),
             ],
@@ -107,7 +104,7 @@ class _HomePageState extends State<HomePage> {
           onPressed: createNewNote,
           elevation: 0,
           //backgroundColor: Colors.grey,
-          label: Row(
+          label: const Row(
             children: [
               Icon(
                 Icons.add,
@@ -128,17 +125,17 @@ class _HomePageState extends State<HomePage> {
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             // heading
             Padding(
-                padding: EdgeInsets.only(left: 25),
+                padding: const EdgeInsets.only(left: 25),
                 child: Text(
                   "Notes",
                   style: GoogleFonts.inconsolata(
                       fontSize: 60, fontWeight: FontWeight.bold,color: Theme.of(context).colorScheme.secondary.computeLuminance() > 0.5 ? Colors.black45 : Colors.white70),
                 )),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             // List of Notes
-            value.getAllNotes().length == 0
+            value.getAllNotes().isEmpty
                 ? Center(
                     child: Padding(
                       padding: const EdgeInsets.only(left: 20),
@@ -211,11 +208,11 @@ class _HomePageState extends State<HomePage> {
                                             ),
                                       additionalInfo:
                                           value.getAllNotes()[index].isProtect
-                                              ? Icon(
+                                              ? const Icon(
                                                   Icons.fingerprint_outlined,
                                                   color: Colors.blue,
                                                 )
-                                              : Text(""),
+                                              : const Text(""),
                                       trailing: Row(
                                         children: [
                                           IconButton(
@@ -246,17 +243,17 @@ class _HomePageState extends State<HomePage> {
                                             icon: value
                                                     .getAllNotes()[index]
                                                     .isProtect
-                                                ? Icon(
+                                                ? const Icon(
                                                     Icons.lock_outline,
                                                     color: Colors.yellow,
                                                   )
-                                                : Icon(
+                                                : const Icon(
                                                     Icons.lock_open_outlined,
                                                     color: Colors.yellowAccent,
                                                   ),
                                           ),
                                           IconButton(
-                                            icon: Icon(
+                                            icon: const Icon(
                                               Icons.delete_forever,
                                               color: Colors.red,
                                             ),

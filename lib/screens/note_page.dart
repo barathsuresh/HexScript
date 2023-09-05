@@ -16,7 +16,7 @@ class NotePage extends StatefulWidget {
   State<NotePage> createState() => _NotePageState();
 }
 
-class _NotePageState extends State<NotePage> {
+class _NotePageState extends State<NotePage> with WidgetsBindingObserver{
   final _formKey = GlobalKey<FormState>();
 
   TextEditingController _titleController = TextEditingController();
@@ -29,8 +29,16 @@ class _NotePageState extends State<NotePage> {
     // TODO: implement initState
     super.initState();
     loadExistingNote();
+
+    WidgetsBinding.instance?.addObserver(this);
   }
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    WidgetsBinding.instance?.removeObserver(this);
+    super.dispose();
+  }
   // load existing note
   void loadExistingNote() {
     // final doc = Document()..insert(0, widget.note.txt);
@@ -40,6 +48,29 @@ class _NotePageState extends State<NotePage> {
       _titleController = TextEditingController(text: widget.note.title.trim());
       _contentController = TextEditingController(text: widget.note.txt.trim());
     });
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.paused:
+      // Handle the home button press or recent apps button press here
+        if (widget.isNewNote == true && !_contentController.text.isEmpty) {
+          addNewNote();
+          widget.isNewNote = false;
+        } else if (widget.isNewNote == true && !_titleController.text.isEmpty) {
+          addNewNote();
+          widget.isNewNote = false;
+        } else {
+          updateNote();
+        }
+        break;
+      case AppLifecycleState.resumed:
+      // App is brought back to the foreground
+        break;
+      default:
+        break;
+    }
   }
 
   // add a new note

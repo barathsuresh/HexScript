@@ -71,10 +71,33 @@ class _HomePageState extends State<HomePage> {
       // This continuously listens to the provider
       builder: (context, value, child) => Scaffold(
         appBar: AppBar(
-          title: ImageIcon(
-            AssetImage("images/notepad.png"),
-            color: Theme.of(context).colorScheme.secondary.computeLuminance() > 0.5 ? Colors.black : Colors.white,
-            size: 30,
+          titleTextStyle: TextStyle(color: Theme.of(context).colorScheme.secondary.computeLuminance() > 0.5 ? Colors.black87 : Colors.white),
+          title: Row(
+            children: [
+              ImageIcon(
+                AssetImage("images/notepad.png"),
+                color:
+                    Theme.of(context).colorScheme.secondary.computeLuminance() >
+                            0.5
+                        ? Colors.black
+                        : Colors.white,
+                size: 30,
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              AnimatedTextKit(
+                  totalRepeatCount: 1,
+                  repeatForever: false,
+                  animatedTexts: [
+                    TypewriterAnimatedText(
+                      "HexScript",
+                      textStyle: GoogleFonts.inconsolata(
+                          fontSize: 40, fontWeight: FontWeight.bold),
+                      speed: Duration(milliseconds: 100),
+                    )
+                  ]),
+            ],
           ),
           backgroundColor: Theme.of(context).colorScheme.primary,
           elevation: 0,
@@ -105,29 +128,35 @@ class _HomePageState extends State<HomePage> {
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             // heading
             Padding(
-              padding: EdgeInsets.only(left: 25),
-              child: AnimatedTextKit(repeatForever: true, animatedTexts: [
-                TypewriterAnimatedText("HexScript",
-                    textStyle: GoogleFonts.inconsolata(
-                        fontSize: 40, fontWeight: FontWeight.bold),
-                speed: Duration(milliseconds: 100),)
-              ]),
+                padding: EdgeInsets.only(left: 25),
+                child: Text(
+                  "Notes",
+                  style: GoogleFonts.inconsolata(
+                      fontSize: 60, fontWeight: FontWeight.bold,color: Theme.of(context).colorScheme.secondary.computeLuminance() > 0.5 ? Colors.black45 : Colors.white70),
+                )),
+            SizedBox(
+              height: 10,
             ),
-            SizedBox(height: 20,),
             // List of Notes
             value.getAllNotes().length == 0
                 ? Center(
-                  child: Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Developed by",style: TextStyle(fontWeight: FontWeight.normal),),
-                    Text("               ~Barath Suresh",style: TextStyle(fontWeight: FontWeight.w900),)
-                  ],
-              ),
-            ),
-                )
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Developed by",
+                            style: TextStyle(fontWeight: FontWeight.normal,color: Theme.of(context).colorScheme.secondary.computeLuminance() > 0.5 ? Colors.black45 : Colors.white70),
+                          ),
+                          Text(
+                            "               ~Barath Suresh",
+                            style: TextStyle(fontWeight: FontWeight.w900,color: Theme.of(context).colorScheme.secondary.computeLuminance() > 0.5 ? Colors.black45 : Colors.white70),
+                          )
+                        ],
+                      ),
+                    ),
+                  )
                 : Container(
                     height: (MediaQuery.of(context).size.height -
                             MediaQuery.of(context).padding.bottom) *
@@ -142,10 +171,19 @@ class _HomePageState extends State<HomePage> {
                             children: List.generate(
                                 value.getAllNotes().length,
                                 (index) => CupertinoListTile(
-                                      backgroundColor: Theme.of(context).colorScheme.tertiary,
+                                      backgroundColor: Theme.of(context)
+                                          .colorScheme
+                                          .tertiary,
                                       title: Text(
                                         value.getAllNotes()[index].title,
-                                        style: TextStyle(color: Theme.of(context).colorScheme.tertiary.computeLuminance() > 0.5 ? Colors.black : Colors.white),
+                                        style: TextStyle(
+                                            color: Theme.of(context)
+                                                        .colorScheme
+                                                        .tertiary
+                                                        .computeLuminance() >
+                                                    0.5
+                                                ? Colors.black
+                                                : Colors.white),
                                       ),
                                       subtitle: value
                                               .getAllNotes()[index]
@@ -153,11 +191,23 @@ class _HomePageState extends State<HomePage> {
                                           ? Text(
                                               "Biometric unlock to access🗝️",
                                               style: TextStyle(
-                                                  color: Theme.of(context).colorScheme.tertiary.computeLuminance() > 0.5 ? Colors.black : Colors.white))
+                                                  color: Theme.of(context)
+                                                              .colorScheme
+                                                              .tertiary
+                                                              .computeLuminance() >
+                                                          0.5
+                                                      ? Colors.black
+                                                      : Colors.white))
                                           : Text(
                                               value.getAllNotes()[index].txt,
                                               style: TextStyle(
-                                                  color: Theme.of(context).colorScheme.tertiary.computeLuminance() > 0.5 ? Colors.black : Colors.white),
+                                                  color: Theme.of(context)
+                                                              .colorScheme
+                                                              .tertiary
+                                                              .computeLuminance() >
+                                                          0.5
+                                                      ? Colors.black
+                                                      : Colors.white),
                                             ),
                                       additionalInfo:
                                           value.getAllNotes()[index].isProtect

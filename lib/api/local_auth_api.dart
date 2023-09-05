@@ -20,7 +20,7 @@ class LocalAuthApi {
       return await _auth.authenticate(
           localizedReason: 'SCAN FINGERPRINT TO ACCESS THIS NOTE 🔐',
           options:
-              AuthenticationOptions(useErrorDialogs: true, stickyAuth: true));
+              AuthenticationOptions(useErrorDialogs: true, stickyAuth: true, biometricOnly: true));
     } on Exception catch (e) {
       return false;
     }

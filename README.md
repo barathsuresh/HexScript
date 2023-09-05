@@ -1,4 +1,4 @@
-# encrynotes
+# HexScript
 
 A notes app made with Flutter x Hive DB
 

@@ -1,6 +1,6 @@
 import 'package:encrynotes/constants/colors_constants.dart';
 import 'package:encrynotes/models/note.dart';
-import 'package:encrynotes/models/note_data.dart';
+import 'package:encrynotes/providers/note_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';

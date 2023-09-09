@@ -1,16 +1,22 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:encrynotes/api/local_auth_api.dart';
+import 'package:encrynotes/constants/firestore_constants.dart';
 import 'package:encrynotes/models/note.dart';
-import 'package:encrynotes/models/note_data.dart';
+import 'package:encrynotes/providers/note_provider.dart';
+import 'package:encrynotes/providers/authentication_provider.dart';
+import 'package:encrynotes/screens/login_screen.dart';
 import 'package:encrynotes/screens/note_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
-
+  // const HomePage({Key? key}) : super(key: key);
+  final SharedPreferences prefs;
+  HomePage({required this.prefs});
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -63,12 +69,18 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
     const duration = Duration(milliseconds: 300);
     return Consumer<NoteData>(
       // This continuously listens to the provider
       builder: (context, value, child) => Scaffold(
         appBar: AppBar(
-          titleTextStyle: TextStyle(color: Theme.of(context).colorScheme.secondary.computeLuminance() > 0.5 ? Colors.black87 : Colors.white),
+          titleTextStyle: TextStyle(
+              color:
+                  Theme.of(context).colorScheme.secondary.computeLuminance() >
+                          0.5
+                      ? Colors.black87
+                      : Colors.white),
           title: Row(
             children: [
               ImageIcon(
@@ -98,6 +110,19 @@ class _HomePageState extends State<HomePage> {
           ),
           backgroundColor: Theme.of(context).colorScheme.primary,
           elevation: 0,
+          actions: [
+            IconButton(
+              onPressed: () {
+                authProvider.handleSignOut();
+                Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => LoginScreen(prefs: widget.prefs)));
+              },
+              icon: CircleAvatar(
+                radius: 20,
+                backgroundImage: CachedNetworkImageProvider('${widget.prefs.get(fireConstants.photoUrl)}',
+                ),
+              ),
+            ),
+          ],
         ),
         backgroundColor: Theme.of(context).colorScheme.secondary,
         floatingActionButton: FloatingActionButton.extended(
@@ -129,7 +154,15 @@ class _HomePageState extends State<HomePage> {
                 child: Text(
                   "Notes",
                   style: GoogleFonts.inconsolata(
-                      fontSize: 60, fontWeight: FontWeight.bold,color: Theme.of(context).colorScheme.secondary.computeLuminance() > 0.5 ? Colors.black45 : Colors.white70),
+                      fontSize: 60,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context)
+                                  .colorScheme
+                                  .secondary
+                                  .computeLuminance() >
+                              0.5
+                          ? Colors.black45
+                          : Colors.white70),
                 )),
             const SizedBox(
               height: 10,
@@ -144,11 +177,27 @@ class _HomePageState extends State<HomePage> {
                         children: [
                           Text(
                             "Developed by",
-                            style: TextStyle(fontWeight: FontWeight.normal,color: Theme.of(context).colorScheme.secondary.computeLuminance() > 0.5 ? Colors.black45 : Colors.white70),
+                            style: TextStyle(
+                                fontWeight: FontWeight.normal,
+                                color: Theme.of(context)
+                                            .colorScheme
+                                            .secondary
+                                            .computeLuminance() >
+                                        0.5
+                                    ? Colors.black45
+                                    : Colors.white70),
                           ),
                           Text(
                             "               ~Barath Suresh",
-                            style: TextStyle(fontWeight: FontWeight.w900,color: Theme.of(context).colorScheme.secondary.computeLuminance() > 0.5 ? Colors.black45 : Colors.white70),
+                            style: TextStyle(
+                                fontWeight: FontWeight.w900,
+                                color: Theme.of(context)
+                                            .colorScheme
+                                            .secondary
+                                            .computeLuminance() >
+                                        0.5
+                                    ? Colors.black45
+                                    : Colors.white70),
                           )
                         ],
                       ),

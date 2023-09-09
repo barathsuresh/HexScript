@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "966590749018",
+    "project_id": "hexbarath",
+    "storage_bucket": "hexbarath.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:966590749018:android:9c8f10f0da8500e5527b63",
+        "android_client_info": {
+          "package_name": "com.hex.hexcript"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "966590749018-e5mads8eurdc4srh20tf68uso3q8j3sp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hex.hexcript",
+            "certificate_hash": "bb79bad9258c8754a529e28c7afb91a85ee0fa4d"
+          }
+        },
+        {
+          "client_id": "966590749018-0ncknjs6g0v050ppsmr77t73oppgarvn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBtmUxabHm3L7WuC488e7d2F927HUYATto"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "966590749018-0ncknjs6g0v050ppsmr77t73oppgarvn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

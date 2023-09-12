@@ -1,8 +1,10 @@
+import 'package:HexScript/api/encrypt_decrypt.dart';
+import 'package:HexScript/data/hive_database.dart';
+import 'package:HexScript/models/note.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:encrynotes/data/hive_database.dart';
-import 'package:encrynotes/models/note.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 
 class NoteData extends ChangeNotifier {
@@ -60,8 +62,8 @@ class NoteData extends ChangeNotifier {
   void updateNote(Note note, String txt, String title) {
     for (int i = 0; i < allNotes.length; i++) {
       if (allNotes[i].id == note.id) {
-        allNotes[i].txt = txt;
-        allNotes[i].title = title;
+        allNotes[i].txt = txt.isEmpty ? "" : EncryptionDecryption.encryptMessage(txt);
+        allNotes[i].title = title.isEmpty ? "" : EncryptionDecryption.encryptMessage(title);
         allNotes[i].edited =
             DateFormat("E, d MMM yyyy h:mm a").format(DateTime.now());
       }
@@ -69,6 +71,15 @@ class NoteData extends ChangeNotifier {
     db.saveNotes(allNotes);
     _syncWithFirebase();
     notifyListeners();
+  }
+
+  List<Note> searchNotes(String query) {
+    query = query.toLowerCase(); // Convert the query to lowercase for case-insensitive search
+    return allNotes.where((note) {
+      final title = note.title.toLowerCase().isEmpty ? "" : EncryptionDecryption.decryptMessage(note.title).toString().toLowerCase();
+      final txt = note.txt.toLowerCase().isEmpty ? "" : EncryptionDecryption.decryptMessage(note.txt).toString().toLowerCase();
+      return title.contains(query) || txt.contains(query);
+    }).toList();
   }
 
   // update note security
@@ -98,6 +109,19 @@ class NoteData extends ChangeNotifier {
         'notes' : allNotes.map((note) => note.toJson()).toList(),
       };
       await _notesCollection.doc(user.uid).set(data);
+    }
+  }
+  Future<void> clearHiveDatabase() async{
+    final box = await Hive.openBox('note_database');
+    await box.clear();
+  }
+  // Delete documents associated with a user
+  Future<void> deleteUserData() async {
+    final user = _auth.currentUser;
+    if (user != null) {
+      // Delete the documents associated with the user
+      await _notesCollection.doc(user.uid).delete();
+      await clearHiveDatabase();
     }
   }
 }

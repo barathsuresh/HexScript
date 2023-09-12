@@ -6,7 +6,7 @@ class LocalAuthApi {
   static Future<bool> hasBiometrics() async {
     try {
       return await _auth.canCheckBiometrics;
-    } on Exception catch (e) {
+    } on Exception {
       // TODO
       return false;
     }
@@ -21,7 +21,7 @@ class LocalAuthApi {
           localizedReason: ' ',
           options:
               AuthenticationOptions(useErrorDialogs: true, stickyAuth: true, biometricOnly: true));
-    } on Exception catch (e) {
+    } on Exception {
       return false;
     }
   }

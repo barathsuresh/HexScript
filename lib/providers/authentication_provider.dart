@@ -1,6 +1,6 @@
+import 'package:HexScript/constants/firestore_constants.dart';
+import 'package:HexScript/models/UserDocumentJsonFormatting.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:encrynotes/constants/firestore_constants.dart';
-import 'package:encrynotes/models/UserDocumentJsonFormatting.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -19,6 +19,7 @@ class AuthProvider extends ChangeNotifier {
   late final GoogleSignIn googleSignIn;
   late final FirebaseFirestore firebaseFirestore;
   late final FirebaseAuth firebaseAuth;
+  late CollectionReference _userCollection;
   final SharedPreferences preferences;
   Status _status = Status.uninitialized;
   Status get status => _status;
@@ -28,7 +29,9 @@ class AuthProvider extends ChangeNotifier {
       {required this.preferences,
       required this.firebaseFirestore,
       required this.firebaseAuth,
-      required this.googleSignIn});
+      required this.googleSignIn,
+        CollectionReference? userCollection,
+      }): _userCollection = userCollection ?? FirebaseFirestore.instance.collection('users');
 
   String? getUserFirebaseId() {
     return preferences.getString(fireConstants.id);
@@ -134,4 +137,22 @@ class AuthProvider extends ChangeNotifier {
     await googleSignIn.signOut();
     await clearHiveDatabase();
   }
+
+  Future<void> deleteUserAccount() async {
+    try {
+      final User? firebaseUser = firebaseAuth.currentUser;
+      final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      if (firebaseUser != null) {
+        await _userCollection.doc(firebaseUser.uid).delete();
+        await firebaseUser.delete();
+        sharedPreferences.clear();
+        _status = Status.uninitialized;
+        notifyListeners();
+      }
+    } catch (error) {
+      // Handle any errors that occur during account deletion
+      print("Error deleting user account: $error");
+    }
+  }
+
 }

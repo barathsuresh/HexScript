@@ -1,9 +1,9 @@
+import 'package:HexScript/providers/authentication_provider.dart';
+import 'package:HexScript/providers/note_provider.dart';
+import 'package:HexScript/providers/theme_provider.dart';
+import 'package:HexScript/screens/splash_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dynamic_color/dynamic_color.dart';
-import 'package:encrynotes/providers/note_provider.dart';
-import 'package:encrynotes/providers/authentication_provider.dart';
-import 'package:encrynotes/screens/home_page.dart';
-import 'package:encrynotes/screens/splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -57,32 +57,81 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => NoteData(),
-          builder: (context, child) =>
-              DynamicColorBuilder(builder: (ColorScheme1, ColorScheme2) {
-            return MaterialApp(
-              home: SplashScreen(prefs: prefs,),
-              theme: ThemeData(
-                useMaterial3: true,
-                colorScheme: ColorScheme2 ?? _defaultLightColorScheme,
-                // brightness: Brightness.light,
-                textTheme: GoogleFonts.robotoSlabTextTheme(Theme.of(context)
-                    .textTheme
-                    .apply(
-                        bodyColor: Colors.white, displayColor: Colors.white70)),
-              ),
-              darkTheme: ThemeData(
-                // brightness: Brightness.dark,
-                useMaterial3: true,
-                colorScheme: ColorScheme1 ?? _defaultDarkColorScheme,
-                textTheme: GoogleFonts.robotoSlabTextTheme(Theme.of(context)
-                    .textTheme
-                    .apply(
-                        bodyColor: Colors.white, displayColor: Colors.white70)),
-              ),
-              themeMode: ThemeMode.system,
-            );
-          }),
         ),
+        ChangeNotifierProvider(
+          create: (_) => ThemeProvider(),
+          builder: (context,child) => DynamicColorBuilder(builder: (ColorScheme1, ColorScheme2) {
+            return Consumer<ThemeProvider>(builder: (context,themeProvider,child){
+              return MaterialApp(
+                  home: SplashScreen(
+                    prefs: prefs,
+                  ),
+                  theme: ThemeData(
+                      useMaterial3: true,
+                      colorScheme: ColorScheme2 ?? _defaultLightColorScheme,
+                      // brightness: Brightness.light,
+                      textTheme: GoogleFonts.robotoSlabTextTheme(Theme.of(context)
+                          .textTheme
+                          .apply(
+                          bodyColor: Colors.white,
+                          displayColor: Colors.white70)),
+                      navigationBarTheme: NavigationBarThemeData(
+                        // indicatorColor: Colors.transparent,
+                        iconTheme: MaterialStateProperty.all(
+                          IconThemeData(color: Colors.black54),
+                        ),
+                        labelTextStyle: MaterialStateProperty.resolveWith((states) {
+                          if (states.contains(MaterialState.selected)) {
+                            return const TextStyle(
+                              fontSize: 13.0,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.black,
+                              letterSpacing: 1.0,
+                            );
+                          }
+                          return const TextStyle(
+                            fontSize: 13.0,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.black,
+                            letterSpacing: 1.0,
+                          );
+                        }),
+                      )),
+                  darkTheme: ThemeData(
+                    // brightness: Brightness.dark,
+                      useMaterial3: true,
+                      colorScheme: ColorScheme1 ?? _defaultDarkColorScheme,
+                      textTheme: GoogleFonts.robotoSlabTextTheme(
+                        Theme.of(context).textTheme.apply(
+                            bodyColor: Colors.white, displayColor: Colors.white70),
+                      ),
+                      navigationBarTheme: NavigationBarThemeData(
+                        iconTheme: MaterialStateProperty.all(
+                          IconThemeData(color: Colors.white70),
+                        ),
+                        // indicatorColor: Colors.transparent,
+                        labelTextStyle: MaterialStateProperty.resolveWith((states) {
+                          if (states.contains(MaterialState.selected)) {
+                            return const TextStyle(
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white,
+                              letterSpacing: 1.0,
+                            );
+                          }
+                          return const TextStyle(
+                            fontSize: 13.0,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                            letterSpacing: 1.0,
+                          );
+                        }),
+                      )),
+                  themeMode: themeProvider.isDark ? ThemeMode.dark : ThemeMode.light
+              );
+            });
+          }),
+        )
       ],
     );
   }

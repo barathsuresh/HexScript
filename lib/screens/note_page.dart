@@ -1,6 +1,7 @@
-import 'package:encrynotes/constants/colors_constants.dart';
-import 'package:encrynotes/models/note.dart';
-import 'package:encrynotes/providers/note_provider.dart';
+import 'package:HexScript/api/encrypt_decrypt.dart';
+import 'package:HexScript/models/note.dart';
+import 'package:HexScript/providers/note_provider.dart';
+import 'package:HexScript/providers/theme_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -29,7 +30,6 @@ class _NotePageState extends State<NotePage> with WidgetsBindingObserver{
     // TODO: implement initState
     super.initState();
     loadExistingNote();
-
     WidgetsBinding.instance?.addObserver(this);
   }
 
@@ -37,6 +37,7 @@ class _NotePageState extends State<NotePage> with WidgetsBindingObserver{
   void dispose() {
     // TODO: implement dispose
     WidgetsBinding.instance?.removeObserver(this);
+
     super.dispose();
   }
   // load existing note
@@ -45,8 +46,8 @@ class _NotePageState extends State<NotePage> with WidgetsBindingObserver{
     final offset = widget.note.txt.trim().length;
     TextPosition pos = TextPosition(offset: offset);
     setState(() {
-      _titleController = TextEditingController(text: widget.note.title.trim());
-      _contentController = TextEditingController(text: widget.note.txt.trim());
+      _titleController = TextEditingController(text: widget.isNewNote ? "" : widget.note.title.trim().isEmpty ? "" : EncryptionDecryption.decryptMessage(widget.note.title.trim()));
+      _contentController = TextEditingController(text: widget.isNewNote ? "" : widget.note.txt.trim().isEmpty ? "" : EncryptionDecryption.decryptMessage(widget.note.txt.trim()));
     });
   }
 
@@ -55,10 +56,10 @@ class _NotePageState extends State<NotePage> with WidgetsBindingObserver{
     switch (state) {
       case AppLifecycleState.paused:
       // Handle the home button press or recent apps button press here
-        if (widget.isNewNote == true && !_contentController.text.isEmpty) {
+        if (widget.isNewNote == true && _contentController.text.isNotEmpty) {
           addNewNote();
           widget.isNewNote = false;
-        } else if (widget.isNewNote == true && !_titleController.text.isEmpty) {
+        } else if (widget.isNewNote == true && _titleController.text.isNotEmpty) {
           addNewNote();
           widget.isNewNote = false;
         } else {
@@ -79,8 +80,8 @@ class _NotePageState extends State<NotePage> with WidgetsBindingObserver{
     int id = Provider.of<NoteData>(context, listen: false).getAllNotes().length;
     // get text from editor
     // String txt = _controller.document.toPlainText();
-    String title = _titleController.text;
-    String txt = _contentController.text;
+    String title = _titleController.text.isEmpty ? "" : EncryptionDecryption.encryptMessage(_titleController.text);
+    String txt = _contentController.text.isEmpty ? "" : EncryptionDecryption.encryptMessage(_contentController.text);
     String formatDateTime = DateFormat("E, d MMM yyyy h:mm a").format(DateTime.now());
     // add the new note
     Provider.of<NoteData>(context, listen: false)
@@ -97,7 +98,10 @@ class _NotePageState extends State<NotePage> with WidgetsBindingObserver{
 
     print(text.length);
     print(text);
-    if (text.trim() == widget.note.txt.trim() && title.trim() == widget.note.title.trim()) {
+
+    var checktext = widget.note.txt.trim().isEmpty ? "" : EncryptionDecryption.decryptMessage(widget.note.txt.trim());
+    var checktitle = widget.note.title.trim().isEmpty ? "" : EncryptionDecryption.decryptMessage(widget.note.title.trim());
+    if (text.trim() ==  checktext && title.trim() == checktitle) {
       print("Nothing done");
     }
     // update Note
@@ -115,6 +119,12 @@ class _NotePageState extends State<NotePage> with WidgetsBindingObserver{
     screenWidth = MediaQuery.of(context).size.width;
     screenHeight = MediaQuery.of(context).size.height;
     screenSafeHeight = screenHeight - MediaQuery.of(context).padding.top - MediaQuery.of(context).padding.bottom -16;
+    ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
+
+    var backgroundColorLerp =
+    themeProvider.isDark ? Colors.black : Colors.white;
+    var textIconColor = themeProvider.isDark ? Colors.white : Colors.black;
+
     return WillPopScope(
       onWillPop: () async {
         // if it is a new note
@@ -141,7 +151,7 @@ class _NotePageState extends State<NotePage> with WidgetsBindingObserver{
               leading: IconButton(
                 icon: Icon(
                   Icons.arrow_back,
-                  color: Theme.of(context).colorScheme.secondary.computeLuminance() > 0.5 ? Colors.black : Colors.white,
+                  color: Theme.of(context).colorScheme.primary.computeLuminance() > 0.5 ? Colors.black : Colors.white,
                 ),
                 onPressed: () {
                   // if it is a new note
@@ -156,11 +166,12 @@ class _NotePageState extends State<NotePage> with WidgetsBindingObserver{
                   Navigator.pop(context);
                 },
               ),
-              backgroundColor: Theme.of(context).colorScheme.primary,
+              backgroundColor: backgroundColorLerp,
             ),
-            backgroundColor: Theme.of(context).colorScheme.secondary,
+            backgroundColor: backgroundColorLerp,
             body: SingleChildScrollView(
               padding: EdgeInsets.all(10),
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
               child: Form(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

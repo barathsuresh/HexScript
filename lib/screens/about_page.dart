@@ -85,7 +85,7 @@ class AboutPage extends StatelessWidget {
               onTap: _launchWebPage,
               child: Text(
                 'Developed with ❤️',
-                style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold,color: textIconColor),
               ),
             ),
             SizedBox(

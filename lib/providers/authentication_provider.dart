@@ -145,6 +145,7 @@ class AuthProvider extends ChangeNotifier {
       if (firebaseUser != null) {
         await _userCollection.doc(firebaseUser.uid).delete();
         await firebaseUser.delete();
+        await handleSignOut();
         sharedPreferences.clear();
         _status = Status.uninitialized;
         notifyListeners();

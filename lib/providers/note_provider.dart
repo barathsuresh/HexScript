@@ -15,7 +15,6 @@ class NoteData extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   late CollectionReference _notesCollection;
-
   // overall list
   List<Note> allNotes = [];
 

@@ -23,6 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     AuthenticationProvider authProvider =
         Provider.of<AuthenticationProvider>(context);
+
     switch (authProvider.status) {
       case Status.authenticateError:
         Fluttertoast.showToast(msg: "Sign in failed");

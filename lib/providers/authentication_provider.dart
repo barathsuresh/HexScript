@@ -15,7 +15,7 @@ enum Status {
   authenticateCancelled,
 }
 
-class AuthProvider extends ChangeNotifier {
+class AuthenticationProvider extends ChangeNotifier {
   late final GoogleSignIn googleSignIn;
   late final FirebaseFirestore firebaseFirestore;
   late final FirebaseAuth firebaseAuth;
@@ -25,13 +25,14 @@ class AuthProvider extends ChangeNotifier {
   Status get status => _status;
 
   // for the constructor
-  AuthProvider(
-      {required this.preferences,
-      required this.firebaseFirestore,
-      required this.firebaseAuth,
-      required this.googleSignIn,
-        CollectionReference? userCollection,
-      }): _userCollection = userCollection ?? FirebaseFirestore.instance.collection('users');
+  AuthenticationProvider({
+    required this.preferences,
+    required this.firebaseFirestore,
+    required this.firebaseAuth,
+    required this.googleSignIn,
+    CollectionReference? userCollection,
+  }) : _userCollection =
+            userCollection ?? FirebaseFirestore.instance.collection('users');
 
   String? getUserFirebaseId() {
     return preferences.getString(fireConstants.id);
@@ -124,7 +125,7 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> clearHiveDatabase() async{
+  Future<void> clearHiveDatabase() async {
     final box = await Hive.openBox('note_database');
     await box.clear();
   }
@@ -141,7 +142,8 @@ class AuthProvider extends ChangeNotifier {
   Future<void> deleteUserAccount() async {
     try {
       final User? firebaseUser = firebaseAuth.currentUser;
-      final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      final SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
       if (firebaseUser != null) {
         await _userCollection.doc(firebaseUser.uid).delete();
         await firebaseUser.delete();
@@ -155,5 +157,4 @@ class AuthProvider extends ChangeNotifier {
       print("Error deleting user account: $error");
     }
   }
-
 }

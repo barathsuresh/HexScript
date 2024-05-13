@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => AuthProvider(
+          create: (_) => AuthenticationProvider(
               preferences: prefs,
               firebaseFirestore: firebaseFirestore,
               firebaseAuth: FirebaseAuth.instance,

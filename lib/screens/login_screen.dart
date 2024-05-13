@@ -21,7 +21,8 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
-    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    AuthenticationProvider authProvider =
+        Provider.of<AuthenticationProvider>(context);
     switch (authProvider.status) {
       case Status.authenticateError:
         Fluttertoast.showToast(msg: "Sign in failed");

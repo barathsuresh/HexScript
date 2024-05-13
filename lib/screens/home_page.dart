@@ -181,7 +181,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    AuthenticationProvider authProvider =
+        Provider.of<AuthenticationProvider>(context);
     ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
 
     var backgroundColorLerp =

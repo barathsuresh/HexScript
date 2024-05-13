@@ -25,14 +25,16 @@ class _SettingsPageState extends State<SettingsPage> {
 
   // Function to delete the account
   Future<void> deleteAccount() async {
-    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    AuthenticationProvider authProvider =
+        Provider.of<AuthenticationProvider>(context);
     NoteData noteData = Provider.of<NoteData>(context, listen: false);
   }
 
   @override
   Widget build(BuildContext context) {
     ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
-    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    AuthenticationProvider authProvider =
+        Provider.of<AuthenticationProvider>(context);
     NoteData noteData = Provider.of<NoteData>(context, listen: false);
     var background = themeProvider.isDark ? Colors.black : Colors.white;
     var textIconColor = themeProvider.isDark ? Colors.white : Colors.black;
@@ -53,11 +55,17 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
         title: Row(
           children: [
-            Icon(CommunityMaterialIcons.hexadecimal,size: 50,color: textIconColor,),
+            Icon(
+              CommunityMaterialIcons.hexadecimal,
+              size: 50,
+              color: textIconColor,
+            ),
             Text(
               'Settings',
               style: GoogleFonts.sourceCodePro(
-                  fontSize: 40, fontWeight: FontWeight.bold, color: textIconColor),
+                  fontSize: 40,
+                  fontWeight: FontWeight.bold,
+                  color: textIconColor),
             ),
           ],
         ),
@@ -75,7 +83,6 @@ class _SettingsPageState extends State<SettingsPage> {
                 trailing: Transform.scale(
                   scale: 1.3,
                   child: Switch(
-                    
                     value: themeProvider
                         .isDark, // Get the current theme value from your app settings,
                     onChanged: (newValue) {

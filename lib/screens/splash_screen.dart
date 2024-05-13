@@ -28,7 +28,8 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void checkSignedIn() async{
-    AuthProvider authProvider = context.read<AuthProvider>();
+    AuthenticationProvider authProvider =
+        context.read<AuthenticationProvider>();
     bool isLoggedIn = await authProvider.isLoggedIn();
     if(isLoggedIn){
       Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => HomePage(prefs: widget.prefs,)));
